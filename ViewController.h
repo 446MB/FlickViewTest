@@ -10,4 +10,6 @@
 
 @interface ViewController : UIViewController
 
+@property CGPoint *point;
+
 @end
