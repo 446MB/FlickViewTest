@@ -42,12 +42,13 @@
     NSLog(@"rect.size.width : %f\nrect.size.height : %f",
           rect.size.width,
           rect.size.height);
-    
-    
+
+    // set secondView.
     secondView = [[UIView alloc] initWithFrame: [self initViewPoint: 1]];
     secondView.backgroundColor = [UIColor blueColor];
     [self.view addSubview: secondView];
     
+    // set Button on First View.
     [self.view addSubview: [self generateButton]];
     
     
@@ -62,12 +63,17 @@
     self._width = rect.size.width;
     self._height = rect.size.height;
     rect = CGRectMake(self._next_x, self._y, self._width, self._height);
+    
     NSLog(@"rect.origin.x : %f\nrect.origin.y : %f",
           rect.origin.x,
           rect.origin.y);
+    
     return rect;
 }
 
+/*
+ Button Size
+ */
 - (CGRect) rectSetButtonToButtom {
     float margin = 20;
     float this_height = 40;
@@ -90,8 +96,6 @@
 /* TEST - View movement */
 - (void) next {
     NSLog(@"next did call.");
-    screen = [UIScreen mainScreen];
-    //rect = screen.bounds;
     self.view.frame = CGRectMake(- self._next_x, 0, self._width, self._height);
     
 }
