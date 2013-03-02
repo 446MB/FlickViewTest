@@ -10,6 +10,9 @@
 
 @interface ViewController : UIViewController
 
-@property CGPoint *point;
+@property UIScreen *screen;
+@property CGRect rect;
+@property UIView *secondView;
+@property UIView *thirdView;
 
 @end
