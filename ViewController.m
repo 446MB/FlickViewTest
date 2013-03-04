@@ -16,6 +16,9 @@
 @property float _width;
 @property float _height;
 
+@property UITouch *touchEvent;
+@property CGPoint point;
+
 @end
 
 @implementation ViewController
@@ -98,6 +101,36 @@
     NSLog(@"next did call.");
     self.view.frame = CGRectMake(- self._next_x, 0, self._width, self._height);
     
+}
+
+
+/* 
+ touch EVENTS
+ */
+
+// Touch Begin.
+- (void) touchesBegan:(NSSet*)touches withEvent:(UIEvent*)event
+{
+    self.touchEvent = [touches anyObject];
+    self.point = [self.touchEvent locationInView:self.view];
+    NSLog(@"point.x : %f", self.point.x);
+}
+
+// Touch point Move.
+-(void)touchesMoved:(NSSet*)touches withEvent:(UIEvent*)event {
+    self.point = [self.touchEvent locationInView: self.view];
+    NSLog(@"point.x MOVE : %f", self.point.x);
+}
+
+// Touch End.
+-(void)touchesEnded:(NSSet*)touches withEvent:(UIEvent*)event {
+    self.point = [self.touchEvent locationInView: self.view];
+    NSLog(@"point.x END : %f", self.point.x);
+}
+
+// To Do : Search.
+// touchUp out of View?
+-(void)touchesCancelled:(NSSet*)touches withEvent:(UIEvent*)event {
 }
 
 - (void)didReceiveMemoryWarning
