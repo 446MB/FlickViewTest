@@ -136,8 +136,10 @@
     NSLog(@"\n\n_movement_x : %f\n\n_movement_y : %f", _movement_x, _movement_y);
     
     // move View
-    // Can I use CGRectMake on touchesMoved??
-    self.view.frame = CGRectMake(_movement_x, _movement_y, self.view.frame.size.width, self.view.frame.size.height);
+    // Do not use CGRectMake.
+    // use CGAffineTransformMake....
+//    self.view.frame = CGRectMake(_movement_x, _movement_y, self.view.frame.size.width, self.view.frame.size.height);
+    self.view.transform = CGAffineTransformMakeTranslation ( _movement_x, 0);
 }
 
 // Touch End.
@@ -148,7 +150,7 @@
 
 // To Do : Search.
 // touchUp out of View?
--(void)touchesCancelled:(NSSet*)touches withEvent:(UIEvent*)event {
+-(void)touchesCancelled:(NSSet*)touches withEvent:(UIEvent*) event {
 }
 
 - (void)didReceiveMemoryWarning
