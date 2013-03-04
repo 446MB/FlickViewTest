@@ -18,6 +18,8 @@
 
 @property UITouch *touchEvent;
 @property CGPoint point;
+@property float _x_beganTouch;
+@property float _y_beganTouch;
 
 @end
 
@@ -32,6 +34,11 @@
 @synthesize _y;
 @synthesize _width;
 @synthesize _height;
+
+@synthesize touchEvent;
+@synthesize point;
+@synthesize _x_beganTouch;
+@synthesize _y_beganTouch;
 
 - (void)viewDidLoad
 {
@@ -113,13 +120,24 @@
 {
     self.touchEvent = [touches anyObject];
     self.point = [self.touchEvent locationInView:self.view];
-    NSLog(@"point.x : %f", self.point.x);
+    // set Start Touch Point;
+    self._x_beganTouch = self.point.x;
+    self._y_beganTouch = self.point.y;
+    NSLog(@"point.x BEGAN : %f", self.point.x);
 }
 
 // Touch point Move.
 -(void)touchesMoved:(NSSet*)touches withEvent:(UIEvent*)event {
     self.point = [self.touchEvent locationInView: self.view];
     NSLog(@"point.x MOVE : %f", self.point.x);
+    // get Movement.
+    float _movement_x = self.point.x - self._x_beganTouch;
+    float _movement_y = self.point.y - self._y_beganTouch;
+    NSLog(@"\n\n_movement_x : %f\n\n_movement_y : %f", _movement_x, _movement_y);
+    
+    // move View
+    // Can I use CGRectMake on touchesMoved??
+    self.view.frame = CGRectMake(_movement_x, _movement_y, self.view.frame.size.width, self.view.frame.size.height);
 }
 
 // Touch End.
