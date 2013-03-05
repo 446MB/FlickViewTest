@@ -12,7 +12,10 @@
 
 @property UIScreen *screen;
 @property CGRect rect;
+@property UIView *firstView;
 @property UIView *secondView;
 @property UIView *thirdView;
+
+@property UIScrollView *scrollView;
 
 @end

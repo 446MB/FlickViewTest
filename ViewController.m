@@ -16,17 +16,14 @@
 @property float _width;
 @property float _height;
 
-@property UITouch *touchEvent;
-@property CGPoint point;
-@property float _x_beganTouch;
-@property float _y_beganTouch;
-
 @end
 
 @implementation ViewController
 
 @synthesize screen;
 @synthesize rect;
+@synthesize scrollView;
+@synthesize firstView;
 @synthesize secondView;
 @synthesize thirdView;
 @synthesize _next_x;
@@ -35,11 +32,6 @@
 @synthesize _width;
 @synthesize _height;
 
-@synthesize touchEvent;
-@synthesize point;
-@synthesize _x_beganTouch;
-@synthesize _y_beganTouch;
-
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -47,21 +39,38 @@
     screen = [UIScreen mainScreen];
     rect = screen.applicationFrame;
     
-    self.view.backgroundColor = [UIColor grayColor];
+    self.view.backgroundColor = [UIColor redColor];
     
     NSLog(@"rect.size.width : %f\nrect.size.height : %f",
           rect.size.width,
           rect.size.height);
+    
+    
+    // set Scroll View
+    scrollView = [[UIScrollView alloc] initWithFrame: CGRectMake(0, 0, self.rect.size.width, self.rect.size.height)];
+    scrollView.backgroundColor = [UIColor whiteColor];
+    scrollView.contentSize = CGSizeMake(320*3, 480);
+    [scrollView setShowsVerticalScrollIndicator: NO];
+    [scrollView setShowsHorizontalScrollIndicator: NO];
+    scrollView.pagingEnabled = YES;
+    
+    [self.view addSubview: scrollView];
+    
+    // set firstView.
+    firstView = [[UIView alloc] initWithFrame: [self initViewPoint: 0]];
+    firstView.backgroundColor = [UIColor lightTextColor];
+    [self.scrollView addSubview: firstView];
 
     // set secondView.
     secondView = [[UIView alloc] initWithFrame: [self initViewPoint: 1]];
-    secondView.backgroundColor = [UIColor blueColor];
-    [self.view addSubview: secondView];
-    
-    // set Button on First View.
-    [self.view addSubview: [self generateButton]];
-    
-    
+    secondView.backgroundColor = [UIColor darkTextColor];
+    [self.scrollView addSubview: secondView];
+
+    // set thirdView.
+    thirdView = [[UIView alloc] initWithFrame: [self initViewPoint: 2]];
+    thirdView.backgroundColor = [UIColor scrollViewTexturedBackgroundColor];
+    [self.scrollView addSubview: thirdView];
+
 }
 
 /*
@@ -69,88 +78,19 @@
  */
 - (CGRect) initViewPoint : (int) intNumberOfView {
     self._next_x = rect.size.width * intNumberOfView;
-    self._y = rect.origin.y;
+//    self._y = rect.origin.y;
+    self._y = 0;
     self._width = rect.size.width;
     self._height = rect.size.height;
     rect = CGRectMake(self._next_x, self._y, self._width, self._height);
+    
+    NSLog(@"self._y : %f", self._y);
     
     NSLog(@"rect.origin.x : %f\nrect.origin.y : %f",
           rect.origin.x,
           rect.origin.y);
     
     return rect;
-}
-
-/*
- Button Size
- */
-- (CGRect) rectSetButtonToButtom {
-    float margin = 20;
-    float this_height = 40;
-    float this_x = 20;
-    float this_y = rect.size.height - margin - this_height;
-    float this_width = rect.size.width - (margin * 2);
-    rect = CGRectMake(this_x, this_y, this_width, this_height);
-    return rect;
-}
-
-- (UIButton*) generateButton {
-    NSString *title = @"NEXT";
-    UIButton *button = [[UIButton alloc] initWithFrame: [self rectSetButtonToButtom]];
-    [button setTitle: title forState: UIControlStateNormal];
-    button.backgroundColor = [UIColor redColor];
-    [button addTarget:self action:@selector(next) forControlEvents:UIControlEventTouchUpInside];
-    return button;
-}
-
-/* TEST - View movement */
-- (void) next {
-    NSLog(@"next did call.");
-    self.view.frame = CGRectMake(- self._next_x, 0, self._width, self._height);
-    
-}
-
-
-/* 
- touch EVENTS
- */
-
-// Touch Begin.
-- (void) touchesBegan:(NSSet*)touches withEvent:(UIEvent*)event
-{
-    self.touchEvent = [touches anyObject];
-    self.point = [self.touchEvent locationInView:self.view];
-    // set Start Touch Point;
-    self._x_beganTouch = self.point.x;
-    self._y_beganTouch = self.point.y;
-    NSLog(@"point.x BEGAN : %f", self.point.x);
-}
-
-// Touch point Move.
--(void)touchesMoved:(NSSet*)touches withEvent:(UIEvent*)event {
-    self.point = [self.touchEvent locationInView: self.view];
-    NSLog(@"point.x MOVE : %f", self.point.x);
-    // get Movement.
-    float _movement_x = self.point.x - self._x_beganTouch;
-    float _movement_y = self.point.y - self._y_beganTouch;
-    NSLog(@"\n\n_movement_x : %f\n\n_movement_y : %f", _movement_x, _movement_y);
-    
-    // move View
-    // Do not use CGRectMake.
-    // use CGAffineTransformMake....
-//    self.view.frame = CGRectMake(_movement_x, _movement_y, self.view.frame.size.width, self.view.frame.size.height);
-    self.view.transform = CGAffineTransformMakeTranslation ( _movement_x, 0);
-}
-
-// Touch End.
--(void)touchesEnded:(NSSet*)touches withEvent:(UIEvent*)event {
-    self.point = [self.touchEvent locationInView: self.view];
-    NSLog(@"point.x END : %f", self.point.x);
-}
-
-// To Do : Search.
-// touchUp out of View?
--(void)touchesCancelled:(NSSet*)touches withEvent:(UIEvent*) event {
 }
 
 - (void)didReceiveMemoryWarning
