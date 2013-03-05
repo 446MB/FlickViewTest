@@ -53,6 +53,7 @@
     [scrollView setShowsVerticalScrollIndicator: NO];
     [scrollView setShowsHorizontalScrollIndicator: NO];
     scrollView.pagingEnabled = YES;
+    scrollView.bounces = NO;
     
     [self.view addSubview: scrollView];
     
@@ -91,6 +92,15 @@
           rect.origin.y);
     
     return rect;
+}
+
+- (void) scrollViewDidScroll:(UIScrollView *)scrollView_ {
+    if(scrollView_.contentOffset.y != 0){
+        CGPoint newOffset = CGPointMake(scrollView_.contentOffset.x, 0);
+        scrollView_.contentOffset = newOffset;
+    }
+    
+//    [(id<UIScrollViewDelegate>)[self proxy] scrollViewDidScroll:scrollView_];
 }
 
 - (void)didReceiveMemoryWarning
